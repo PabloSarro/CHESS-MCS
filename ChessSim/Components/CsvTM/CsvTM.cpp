@@ -76,6 +76,7 @@ void CsvTM ::schedIn_handler(const FwIndexType portNum, const U32 context) {
         this->m_csvFile.clear(); // Clear EOF flag
         this->m_csvFile.seekg(0);
         printf("[CsvTM] End of file reached. Rewinding.\n");
+        fflush(stdout);
     }
 }
 
