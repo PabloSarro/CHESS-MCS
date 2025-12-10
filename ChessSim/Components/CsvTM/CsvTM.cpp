@@ -20,7 +20,7 @@ CsvTM ::CsvTM(const char* const compName) :
     m_fileOpen(false)
 {
     // Hardcoded path for simulation
-    this->m_fileName = "/tmp/sim_data.csv";
+    this->m_fileName = "sim_data.csv";
 }
 
 CsvTM ::~CsvTM() {
@@ -64,9 +64,12 @@ void CsvTM ::schedIn_handler(const FwIndexType portNum, const U32 context) {
             float value = std::stof(line);
             this->tlmWrite_CsvValue(static_cast<F32>(value));
             printf("[CsvTM] Read success: %f\n", value);
+            fflush(stdout);
+
         } catch (...) {
             // Ignore parsing errors (e.g. empty lines)
             printf("[CsvTM] ERROR: Could not parse float from line: '%s'\n", line.c_str());
+            fflush(stdout);
         }
     } else {
         // 4. End of file? Rewind to start loop
