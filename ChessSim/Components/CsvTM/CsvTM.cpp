@@ -1,7 +1,7 @@
 // ======================================================================
 // \title  CsvTM.cpp
 // \author pablo
-// \brief  cpp file for CsvTM component implementation class
+// \brief  cpp file for CsvTM component implementation class.
 // ======================================================================
 
 #include "ChessSim/Components/CsvTM/CsvTM.hpp"
