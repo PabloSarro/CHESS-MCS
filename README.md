@@ -21,8 +21,6 @@ sudo apt install -y \
   build-essential
 ```
 
-No Conda is required or recommended.
-
 ---
 
 ## 2. Clone the repository
@@ -39,7 +37,7 @@ The repository already contains:
 * the simulation data,
 * and all required configuration files.
 
-No project generation is needed.
+Thus no project generation is needed.
 
 ---
 
@@ -71,6 +69,8 @@ No additional packages are needed.
 ---
 
 ## 5. Generate and build the project
+
+_Note: if you make changes to the existing project, start here immediately after saving your edits._
 
 From the **repository root**:
 
@@ -124,26 +124,13 @@ If you restart immediately and encounter a temporary
 fprime-gds
 ```
 
-This is a known TCP shutdown behavior and not a configuration issue.
-
 ---
 
 ## 8. Optional: Development with CLion
 
-CLion is **not required** to run the project.
-It may be used optionally for development and code editing, but it is **outside the minimal execution path**.
+CLion is **not required** to run the project. However, it may be used optionally for development and code editing, but it is **outside the minimal execution path**.
 
 ---
-
-## Final notes
-
-* Conda must **not** be used.
-* Only the provided `requirements.txt` is needed.
-* The project is self-contained.
-* The GDS auto-launches the deployment.
-* No additional setup steps are required.
-* CLion may be used to change the custom component to your convenience.
-
 
 
 
