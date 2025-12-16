@@ -1,4 +1,3 @@
-````markdown
 # CHESS-SIM Quick Start Guide
 
 This procedure explains how to run **CHESS-SIM** from a fresh clone.  
@@ -20,7 +19,7 @@ sudo apt install -y \
   python3-pip \
   cmake \
   build-essential
-````
+```
 
 No Conda is required or recommended.
 
@@ -143,4 +142,3 @@ It may be used optionally for development and code editing, but it is **outside 
 * The project is self-contained.
 * The GDS auto-launches the deployment.
 * No additional setup steps are required.
-```
