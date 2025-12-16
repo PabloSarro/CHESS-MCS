@@ -1,191 +1,152 @@
+Here’s your final text formatted as a proper README section, ready to copy-paste:
+
+````markdown
+# CHESS-SIM Quick Start Guide
+
+This procedure explains how to run **CHESS-SIM** from a fresh clone.  
+Tested on **Ubuntu 22.04** (native Linux and WSL2).  
+No prior knowledge of F′ is required and **CLion is optional**.
+
 ---
 
-# CHESS-SIM Setup Guide
+## 1. System prerequisites
 
-This repository contains the implementation of a simulated subsystem for a satellite using NASA’s F´ (F Prime) flight software framework. The objective is to build a component (`CsvTM`) that reads telemetric data from a CSV file and integrates it into an executable deployment (`DeploymentSim`) that can interact with the F´ GDS (Ground Data System). This guide explains how to reproduce the environment, generate the necessary components, configure the project in CLion, and launch the GDS interface.
-
----
-
-## 1. Ensure Correct Environment
-
-These commands update your Ubuntu/WSL system, install essential build tools, set up Python, and ensure CMake and Git are available. This is required because F´ relies on a Python virtual environment and a CMake/Ninja-based build system.
+Install the minimal dependencies:
 
 ```bash
 sudo apt update
-sudo apt upgrade -y
-sudo apt install -y git cmake python3 python3-pip python3-venv build-essential
-```
+sudo apt install -y \
+  git \
+  python3 \
+  python3-venv \
+  python3-pip \
+  cmake \
+  build-essential
+````
+
+No Conda is required or recommended.
 
 ---
 
-## 2. Create the Project Directory
-
-This creates a workspace that will hold your F´ project. F´ recommends a clean directory structure where each project lives inside its own folder.
+## 2. Clone the repository
 
 ```bash
-mkdir fprime-workspace
-cd fprime-workspace
+git clone https://github.com/PabloSarro/CHESS-MCS.git
+cd CHESS-MCS
 ```
+
+The repository already contains:
+
+* the F′ project,
+* the deployment,
+* the simulation data,
+* and all required configuration files.
+
+No project generation is needed.
 
 ---
 
-## 3. Create the F´ Project and Activate Its Environment
-
-Here you install the `fprime-bootstrap` tool, generate a new F´ project, and activate the Python virtual environment belonging to it. The environment isolates dependencies and is mandatory for all subsequent F´ commands.
+## 3. Create and activate the Python virtual environment
 
 ```bash
-pip install fprime-bootstrap
-fprime-bootstrap project CHESS-SIM "ChessSim"
-cd CHESS-SIM
+python3 -m venv fprime-venv
 source fprime-venv/bin/activate
-fprime-util generate
 ```
+
+All F′ tools and dependencies will live inside this environment.
 
 ---
 
-## 4. Create the New Component
-
-This step generates the skeleton for a new F´ component inside the `ChessSim` namespace. You will later implement its logic by editing the `.hpp`, `.cpp`, and `.fpp` files generated here.
+## 4. Install Python dependencies
 
 ```bash
-cd ChessSim/Components
-fprime-util new --component
+pip install -r requirements.txt
 ```
 
-**Inputs:**
+This installs:
 
-* Name: `CsvTM`
-* Description: `Reads CSV Simulation Data`
-* Default values for the rest.
+* F′ core tools,
+* the F′ GDS,
+* and all required Python dependencies.
+
+No additional packages are needed.
 
 ---
 
-## 5. Open CLion and Configure the Project
+## 5. Generate and build the project
 
-CLion must be configured properly so it can:
-
-* use the correct CMake binary inside the F´ virtual environment,
-* build inside the designated F´ build folder,
-* run with the WSL toolchain.
-
-### **Toolchains**
-
-Navigate to:
-`File → Settings → Build, Execution, Deployment → Toolchains`
-
-Configure:
-
-* **Toolset:** Ubuntu-22.04
-* **CMake:**
-  `\\wsl.localhost\Ubuntu-22.04\home\pablo\CHESS-MCS\fprime-workspace\CHESS-SIM\fprime-venv\bin\cmake`
-  (This ensures CLion uses the F´ environment's CMake.)
-* **Debugger:** WSL GDB
-
-### **CMake**
-
-Navigate to:
-`File → Settings → Build, Execution, Deployment → CMake`
-
-Set:
-
-* **Toolchain:** Ubuntu-WSL (default)
-* **Generator:** Ninja
-* **Build directory:**
-  `\\wsl.localhost\Ubuntu-22.04\home\pablo\CHESS-MCS\fprime-workspace\CHESS-SIM\build-fprime-automatic-native`
-
-Afterwards, reload the CMake project:
-
-**File → “Reload CMake Project”**
-
-Repeat until no errors remain. Expected final output:
-
-```
-Build files have been written to: /home/pablo/CHESS-MCS/fprime-workspace/CHESS-SIM/build-fprime-automatic-native
-[Finished]
-```
-
----
-
-## 6. Create Sample Simulation Data
-
-This creates a simple CSV-like file containing floating-point values sampled every second. The `CsvTM` component will read these values and publish them as telemetry.
+From the **repository root**:
 
 ```bash
-echo -e "0.9\n20.5\n40.1\n60.8\n80.9\n100.0" > sim_data.csv
-```
-
----
-
-## 7. Implement the CsvTM Component
-
-These are the files you need to edit to define the component’s behavior:
-
-* `CsvTM.hpp` — Component class definition
-* `CsvTM.cpp` — Implementation logic
-* `CsvTM.fpp` — F´ interface definition
-
-They are located in:
-
-```
-fprime-workspace/CHESS-SIM/ChessSim/Components/CsvTM
-```
-
-After editing, rebuild the project to propagate and generate the updated sources:
-
-```bash
-fprime-util purge
 fprime-util generate
 fprime-util build
 ```
 
----
+This step:
 
-## 8. Create the Deployment (FS Executable)
+* generates F′ sources and dictionaries,
+* builds the `DeploymentSim` executable,
+* prepares the artifacts required by the GDS.
 
-A deployment defines the topology (components, wiring, and ports) of the system. This step generates a new deployment folder and initial FPP files.
-
-```bash
-cd CHESS-SIM/
-fprime-util new --deployment
-```
-
-**Inputs:**
-
-* Name: `DeploymentSim`
-* Defaults for the rest.
-
-### Edit deployment files under:
-
-```
-fprime-workspace/CHESS-SIM/DeploymentSim/Top
-```
-
-Files to modify:
-
-* `topology.fpp` — System architecture
-* `instances.fpp` — Component instantiation and connections
-
-Check formatting and dependencies:
-
-```bash
-fprime-util fpp-check    # A small ERROR with 'fpp-import-list' is expected
-fprime-util build
-```
+It only needs to be repeated if the source code changes.
 
 ---
 
-## 9. Launch the F´ GDS GUI
-
-The GDS lets you view telemetry and send commands to your deployment. Run:
+## 6. Run the F′ Ground Data System (GDS)
 
 ```bash
 fprime-gds
 ```
 
-Then open in your browser:
+After a few seconds, the terminal will print:
 
 ```
-http://127.0.0.1:5000/
+Launched UI at: http://127.0.0.1:5000/
 ```
+
+Open that address in a browser. You should see:
+
+* the F′ GDS interface,
+* telemetry updating once per second from `sim_data.csv`,
+* the `DeploymentSim` executable running automatically.
 
 ---
+
+## 7. Stopping and restarting
+
+To stop the system:
+
+```text
+CTRL-C
+```
+
+If you restart immediately and encounter a temporary
+`Address already in use` error, wait a few seconds and relaunch:
+
+```bash
+fprime-gds
+```
+
+This is a known TCP shutdown behavior and not a configuration issue.
+
+---
+
+## 8. Optional: Development with CLion
+
+CLion is **not required** to run the project.
+It may be used optionally for development and code editing, but it is **outside the minimal execution path**.
+
+---
+
+## Final notes
+
+* Conda must **not** be used.
+* Only the provided `requirements.txt` is needed.
+* The project is self-contained.
+* The GDS auto-launches the deployment.
+* No additional setup steps are required.
+
+```
+
+This can **replace or supplement** your current README to provide a minimal, working guide.
+```
