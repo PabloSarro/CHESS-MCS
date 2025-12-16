@@ -1,8 +1,8 @@
 # CHESS-SIM Quick Start Guide
 
-This procedure explains how to run **CHESS-SIM** from a fresh clone.  
-Tested on **Ubuntu 22.04** (native Linux and WSL2).  
-No prior knowledge of F′ is required and **CLion is optional**.
+This repository contains the implementation of a simulated subsystem for a satellite using NASA’s F´ (F Prime) flight software framework. The objective is to build a component (`CsvTM`) that reads telemetric data from a CSV file and integrates it into an executable deployment (`DeploymentSim`) that can interact with the F´ GDS (Ground Data System). This guide explains how to launch the F' GDS interface, and see the channel `CsvValue` from the aforementioned component changing values every second, corresponding to the content in the file `sim_data.csv`.
+Tested on **Ubuntu 22.04** (native Linux and WSL2).
+No prior knowledge of F′ is required.
 
 ---
 
@@ -142,3 +142,8 @@ It may be used optionally for development and code editing, but it is **outside 
 * The project is self-contained.
 * The GDS auto-launches the deployment.
 * No additional setup steps are required.
+* CLion may be used to change the custom component to your convenience.
+
+
+
+
