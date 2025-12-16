@@ -1,5 +1,3 @@
-Here’s your final text formatted as a proper README section, ready to copy-paste:
-
 ````markdown
 # CHESS-SIM Quick Start Guide
 
@@ -145,8 +143,4 @@ It may be used optionally for development and code editing, but it is **outside 
 * The project is self-contained.
 * The GDS auto-launches the deployment.
 * No additional setup steps are required.
-
-```
-
-This can **replace or supplement** your current README to provide a minimal, working guide.
 ```
